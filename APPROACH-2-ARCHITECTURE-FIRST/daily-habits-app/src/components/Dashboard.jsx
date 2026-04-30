@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import AddHabitForm from './AddHabitForm';
 import HabitList from './HabitList';
+import AnalyticsSummary from './AnalyticsSummary';
 import { useHabit } from '../context/HabitContext';
 
 export default function Dashboard() {
@@ -25,9 +26,7 @@ export default function Dashboard() {
             <div className="mb-4">
               <HabitList />
             </div>
-            <div className="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
-              [ Placeholder for AnalyticsSummary ]
-            </div>
+            <AnalyticsSummary />
           </div>
         </div>
       </main>
