@@ -1,5 +1,7 @@
 import React from 'react';
 import Header from './Header';
+import AddHabitForm from './AddHabitForm';
+import HabitList from './HabitList';
 import { useHabit } from '../context/HabitContext';
 
 export default function Dashboard() {
@@ -17,11 +19,11 @@ export default function Dashboard() {
           </p>
           
           <div className="mt-8 flex flex-col space-y-4">
-            <div className="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
-              [ Placeholder for AddHabitForm ]
+            <div className="text-left mb-4">
+              <AddHabitForm />
             </div>
-            <div className="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
-              [ Placeholder for HabitList ]
+            <div className="mb-4">
+              <HabitList />
             </div>
             <div className="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
               [ Placeholder for AnalyticsSummary ]
