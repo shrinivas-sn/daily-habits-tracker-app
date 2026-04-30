@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { signOut } from 'firebase/auth';
 import { collection, addDoc, serverTimestamp, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { Plus, Check, Flame } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard({ user }) {
   const [title, setTitle] = useState('');
@@ -74,6 +75,21 @@ export default function Dashboard({ user }) {
 
   const todayStr = new Date().toISOString().split('T')[0];
 
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const displayStr = `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`;
+    return { dateStr, displayStr };
+  });
+
+  const chartData = last7Days.map(({ dateStr, displayStr }) => {
+    const completionsOnDate = habits.filter(h => h.completedDates?.includes(dateStr)).length;
+    return { date: displayStr, completions: completionsOnDate };
+  });
+
+  const totalCompletions = habits.reduce((acc, habit) => acc + (habit.completedDates?.length || 0), 0);
+
   return (
     <div className="min-h-screen bg-slate-50 p-4">
       <div className="max-w-2xl mx-auto mt-8">
@@ -113,7 +129,7 @@ export default function Dashboard({ user }) {
           {message && <p className="mt-4 text-sm text-emerald-600 font-medium">{message}</p>}
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-6">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">Today's Goals</h2>
           {loadingHabits ? (
             <p className="text-slate-500">Loading habits...</p>
@@ -147,6 +163,29 @@ export default function Dashboard({ user }) {
               })}
             </div>
           )}
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-semibold text-slate-800">Weekly Summary</h2>
+            <span className="bg-indigo-50 text-indigo-700 text-sm font-semibold px-3 py-1 rounded-full border border-indigo-100">
+              {totalCompletions} Total Completions
+            </span>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData}>
+                <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis allowDecimals={false} stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
+                  itemStyle={{ color: '#4f46e5', fontWeight: 'bold' }}
+                  cursor={{ fill: '#f8fafc' }}
+                />
+                <Bar dataKey="completions" name="Completed Habits" fill="#4f46e5" radius={[4, 4, 0, 0]} barSize={40} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

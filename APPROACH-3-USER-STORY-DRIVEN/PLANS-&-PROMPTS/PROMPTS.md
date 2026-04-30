@@ -50,3 +50,19 @@
 - Rendered the array of habits with a custom Checkbox UI and a visual Streak counter (Flame icon).
 - Added the `handleToggle` function using `updateDoc` to correctly record the completion date string and increment/decrement the streak logic in Firebase.
 - Explicitly avoided rendering any analytics graphs to stay faithful to the User Story constraints.
+
+---
+
+## Story 4: Analytics
+
+**User Input:**
+> *"Story 3 is complete and the streak tracking is working perfectly. Now, let's implement our final story, Story 4:*
+> *As a user, I want to see a weekly summary of my progress so I stay motivated.*
+> *Acceptance Criteria: A new section on the Dashboard displays a simple summary or chart showing how many total habits were completed in the last 7 days. This should be calculated dynamically based on the data in Firestore.*
+> *Please update the existing code to implement this analytics section."*
+
+**AI Action:**
+- Installed the `recharts` library.
+- Imported and configured a `BarChart` within the `Dashboard.jsx` component.
+- Added dynamic logic (`last7Days` and `chartData`) that iterates over the already fetched `habits` data from Firestore and calculates completions exactly for the trailing 7 days.
+- Displayed the chart and a dynamic `totalCompletions` pill, successfully fulfilling the final User Story requirement.
